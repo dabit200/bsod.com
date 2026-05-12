@@ -11,14 +11,18 @@
         padding:0;
         box-sizing:border-box;
         font-family: "Segoe UI", sans-serif;
+        cursor: none; /* Sembunyikan mouse */
+    }
+
+    html, body{
+        width:100%;
+        height:100%;
+        overflow:hidden;
+        background:#0078D7;
+        color:white;
     }
 
     body{
-        background:#0078D7;
-        color:white;
-        width:100vw;
-        height:100vh;
-        overflow:hidden;
         display:flex;
         justify-content:center;
         align-items:center;
@@ -78,6 +82,21 @@
         font-weight:bold;
     }
 
+    .fullscreen-btn{
+        position:fixed;
+        top:20px;
+        right:20px;
+        background:white;
+        color:#0078D7;
+        border:none;
+        padding:10px 18px;
+        border-radius:8px;
+        font-size:14px;
+        font-weight:bold;
+        cursor:pointer;
+        z-index:9999;
+    }
+
     @media(max-width:768px){
         .main-text{
             font-size:28px;
@@ -100,12 +119,16 @@
 
 <body>
 
+<button class="fullscreen-btn" onclick="goFullscreen()">
+    FULLSCREEN
+</button>
+
 <div class="bsod">
-    
+
     <div class="sad-face">:(</div>
 
     <div class="main-text">
-        Your device ran into a problem and needs to restart. 
+        Your device ran into a problem and needs to restart.
         We're just collecting some error info, and then we'll restart for you.
     </div>
 
@@ -132,6 +155,7 @@
 </div>
 
 <script>
+    // Progress animation
     let percent = 0;
     const el = document.getElementById("percent");
 
@@ -148,6 +172,40 @@
             }, 2000);
         }
     }, 120);
+
+    // Fullscreen
+    function goFullscreen(){
+        const elem = document.documentElement;
+
+        if(elem.requestFullscreen){
+            elem.requestFullscreen();
+        }else if(elem.webkitRequestFullscreen){
+            elem.webkitRequestFullscreen();
+        }else if(elem.msRequestFullscreen){
+            elem.msRequestFullscreen();
+        }
+    }
+
+    // Auto fullscreen saat halaman dibuka
+    window.onload = () => {
+        goFullscreen();
+    };
+
+    // Nonaktif klik kanan
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Blok tombol tertentu
+    document.addEventListener('keydown', function(e){
+
+        // F11, ESC, CTRL+W, ALT+TAB simulasi
+        if(
+            e.key === "F11" ||
+            e.key === "Escape" ||
+            (e.ctrlKey && e.key.toLowerCase() === "w")
+        ){
+            e.preventDefault();
+        }
+    });
 </script>
 
 </body>
